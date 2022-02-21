@@ -6,8 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="custom-orm" />
-        <module name="05_ORM" />
+        <module name="06_ORM_2" />
       </profile>
     </annotationProcessing>
   </component>
