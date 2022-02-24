@@ -1,5 +1,7 @@
 package entities;
 
+import org.hibernate.annotations.ListIndexBase;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -13,6 +15,9 @@ public class Teacher {
 
     @Column(name = "started_at")
     private LocalDate startedAt;
+
+    @Transient
+    private int numberOfStudents;
 
     public Teacher () {}
 
