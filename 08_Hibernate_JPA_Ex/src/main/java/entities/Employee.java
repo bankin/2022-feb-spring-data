@@ -21,7 +21,6 @@ public class Employee {
     private Address address;
     private Set<Project> projects;
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employee_id")

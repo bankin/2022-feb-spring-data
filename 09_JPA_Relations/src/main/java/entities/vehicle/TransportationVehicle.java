@@ -1,4 +1,4 @@
-package entities;
+package entities.vehicle;
 
 import javax.persistence.MappedSuperclass;
 

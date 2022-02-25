@@ -1,10 +1,18 @@
-import entities.Bike;
-import entities.Car;
-import entities.Truck;
+import entities.shampoo.BasicIngredient;
+import entities.shampoo.BasicLabel;
+import entities.shampoo.BasicShampoo;
+import entities.shampoo.ProductionBatch;
+import entities.vehicle.Bike;
+import entities.vehicle.Car;
+import entities.vehicle.Truck;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 public class Main {
 
@@ -15,14 +23,30 @@ public class Main {
         EntityManager entityManager = factory.createEntityManager();
         entityManager.getTransaction().begin();
 
-        Bike bike = new Bike(21);
-        Car car = new Car(5);
-        Truck truck = new Truck(25000, 40000);
+        ProductionBatch batch = new ProductionBatch(LocalDate.now());
+        BasicLabel label = new BasicLabel("blue");
+        BasicShampoo shampoo = new BasicShampoo("shower", label, batch);
 
+        BasicIngredient ingredient = new BasicIngredient(100, "B12");
+        BasicIngredient ingredient2 = new BasicIngredient(2, "Violet");
 
-        entityManager.persist(bike);
-        entityManager.persist(car);
-        entityManager.persist(truck);
+        shampoo.addIngredient(ingredient);
+        shampoo.addIngredient(ingredient2);
+
+        List<String> names = Arrays.asList("pesho", "gosho", "alex");
+        shampoo.setNames(names);
+
+        entityManager.persist(ingredient);
+        entityManager.persist(ingredient2);
+
+        entityManager.persist(batch);
+        entityManager.persist(label);
+        entityManager.persist(shampoo);
+
+        ProductionBatch productionBatch = entityManager.find(ProductionBatch.class, 1);
+//        Set<BasicShampoo> shampoos = productionBatch.getShampoos();
+//
+//        shampoos.forEach(System.out::println);
 
         entityManager.getTransaction().commit();
     }

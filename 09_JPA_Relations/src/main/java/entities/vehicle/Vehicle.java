@@ -1,4 +1,4 @@
-package entities;
+package entities.vehicle;
 
 import javax.persistence.*;
 
@@ -16,6 +16,8 @@ public abstract class Vehicle {
     private String type;
 
     private double price;
+
+    private boolean sold;
 
     public Vehicle() {}
 

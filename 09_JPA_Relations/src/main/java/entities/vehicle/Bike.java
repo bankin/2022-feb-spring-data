@@ -1,8 +1,6 @@
-package entities;
+package entities.vehicle;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @DiscriminatorValue("bike")
@@ -10,6 +8,8 @@ public class Bike extends Vehicle {
     private static final String BIKE_TYPE = "Bike";
 
     private int gearsCount;
+
+    public Bike() {}
 
     public Bike(int gearsCount) {
         super(BIKE_TYPE, 250);
