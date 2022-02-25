@@ -6,8 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Entity
-@Table(name = "shampoos")
+@Entity(name = "shampoos")
 public class BasicShampoo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,17 +15,12 @@ public class BasicShampoo {
     private String name;
 
     @OneToOne(optional = false)
-    @JoinColumn(name = "label_id", referencedColumnName = "id")
     private BasicLabel label;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "batch_id", referencedColumnName = "id")
     private ProductionBatch batch;
 
     @ManyToMany
-    @JoinTable(name = "shampoos_ingredients",
-        joinColumns = @JoinColumn(name = "shampoo_id", referencedColumnName = "id"),
-        inverseJoinColumns = @JoinColumn(name = "ingredient_id", referencedColumnName = "id"))
     private Set<BasicIngredient> ingredients;
 
     @ElementCollection

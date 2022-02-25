@@ -5,8 +5,7 @@ import java.time.LocalDate;
 import java.util.PropertyPermission;
 import java.util.Set;
 
-@Entity
-@Table(name = "batches")
+@Entity(name = "batches")
 public class ProductionBatch {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +14,7 @@ public class ProductionBatch {
     private LocalDate createdAt;
 
     @OneToMany(mappedBy = "batch", targetEntity = BasicShampoo.class,
-        fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+        cascade = CascadeType.ALL)
     private Set<BasicShampoo> shampoos;
 
     public ProductionBatch() {}

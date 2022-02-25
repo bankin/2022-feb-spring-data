@@ -2,8 +2,7 @@ package entities.shampoo;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "ingredients")
+@Entity(name = "ingredients")
 public class BasicIngredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
