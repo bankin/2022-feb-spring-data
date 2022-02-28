@@ -44,10 +44,13 @@ public class Main {
         entityManager.persist(shampoo);
 
         ProductionBatch productionBatch = entityManager.find(ProductionBatch.class, 1);
+
 //        Set<BasicShampoo> shampoos = productionBatch.getShampoos();
 //
 //        shampoos.forEach(System.out::println);
 
         entityManager.getTransaction().commit();
+
+
     }
 }
