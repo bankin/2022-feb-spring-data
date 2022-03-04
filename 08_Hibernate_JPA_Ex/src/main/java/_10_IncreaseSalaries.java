@@ -1,15 +1,12 @@
-import entities.Address;
 import entities.Department;
-import entities.Employee;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
-public class _11_IncreaseSalaries {
+public class _10_IncreaseSalaries {
     public static void main(String[] args) {
         EntityManagerFactory factory =
                 Persistence.createEntityManagerFactory("PU_Name");
