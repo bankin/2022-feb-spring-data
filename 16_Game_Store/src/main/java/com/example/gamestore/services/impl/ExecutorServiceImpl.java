@@ -3,8 +3,12 @@ package com.example.gamestore.services.impl;
 import com.example.gamestore.entities.users.LoginDTO;
 import com.example.gamestore.entities.users.RegisterDTO;
 import com.example.gamestore.entities.users.User;
+import com.example.gamestore.entities.users.UserBasicInfoDTO;
 import com.example.gamestore.services.ExecutorService;
 import com.example.gamestore.services.UserService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,27 +19,34 @@ public class ExecutorServiceImpl implements ExecutorService {
 
     private final UserService userService;
 
+    private final Gson gson;
+
+    private final ModelMapper mapper;
+
     @Autowired
     public ExecutorServiceImpl(UserService userService) {
         this.userService = userService;
+
+        this.gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
+
+        this.mapper = new ModelMapper();
     }
 
     @Override
-    public String execute(String commandLine) {
-        String[] commandParts = commandLine.split("\\|");
+    public String execute(String commandName, String data) {
 
-        String commandName = commandParts[0];
-
-        String commandOutput = switch (commandName) {
-            case REGISTER_USER_COMMAND -> registerUser(commandParts);
-            case LOGIN_USER_COMMAND -> loginUser(commandParts);
+        Object commandOutput = switch (commandName) {
+            case REGISTER_USER_COMMAND -> registerUser(data);
+            case LOGIN_USER_COMMAND -> loginUser(data);
             case LOGOUT_USER_COMMAND -> logoutUser();
             case ADD_GAME_COMMAND -> addGame();
 
             default -> "unknown command";
         };
 
-        return commandOutput;
+        return this.gson.toJson(commandOutput);
     }
 
     private String addGame() {
@@ -49,32 +60,33 @@ public class ExecutorServiceImpl implements ExecutorService {
         return null;
     }
 
-    private String logoutUser() {
+    private UserBasicInfoDTO logoutUser() {
         User loggedUser = this.userService.getLoggedUser();
 
         this.userService.logout();
 
-        return String.format("User %s successfully logged out.",
-                loggedUser.getFullName());
+        return this.mapper.map(loggedUser, UserBasicInfoDTO.class);
     }
 
-    private String loginUser(String[] commandParts) {
-        LoginDTO loginData = new LoginDTO(commandParts);
+    private UserBasicInfoDTO loginUser(String data) {
+        LoginDTO loginData = this.gson.fromJson(data, LoginDTO.class);
 
         Optional<User> user = userService.login(loginData);
 
         if (user.isPresent()) {
-            return String.format("Successfully logged in %s",
-                    user.get().getFullName());
+            return this.mapper.map(user.get(), UserBasicInfoDTO.class);
         }
 
-        return "Wrong credentials";
+        // FIXME:
+        return null;
     }
 
-    private String registerUser(String[] commandParts) {
-        RegisterDTO registerData = new RegisterDTO(commandParts);
+    private UserBasicInfoDTO registerUser(String data) {
+        RegisterDTO registerData = this.gson.fromJson(data, RegisterDTO.class);
+        registerData.validate();
+
         User user = userService.register(registerData);
 
-        return String.format("%s was registered", user.getFullName());
+        return this.mapper.map(user, UserBasicInfoDTO.class);
     }
 }

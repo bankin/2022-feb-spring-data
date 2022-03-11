@@ -24,10 +24,11 @@ public class ConsoleRunner implements CommandLineRunner {
         Scanner scanner = new Scanner(System.in);
 
         String command = scanner.nextLine();
+        String commandData = scanner.nextLine();
 
         String result;
         try {
-            result = executorService.execute(command);
+            result = executorService.execute(command, commandData);
         } catch (ValidationException | UserNotLoggedInException ex) {
             result = ex.getMessage();
         }
