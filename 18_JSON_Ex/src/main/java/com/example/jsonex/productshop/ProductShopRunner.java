@@ -18,8 +18,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,7 +55,7 @@ public class ProductShopRunner implements CommandLineRunner {
 
 //        this.userService.getUsersWithSoldProductsOrderByCount();
 
-        xmlDemo();
+        xmlMarshallDemo();
     }
 
     /**
@@ -98,7 +98,7 @@ public class ProductShopRunner implements CommandLineRunner {
         System.out.println(result);
     }
 
-    private void xmlMarshallDemo() throws JAXBException {
+    private void xmlMarshallDemo() throws JAXBException, IOException {
         List<XMLCategoryStatsDTO> xmlResult =
             this.productsService
                 .getCategoryStatistics()
@@ -113,6 +113,13 @@ public class ProductShopRunner implements CommandLineRunner {
         Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         marshaller.marshal(xmlCategoryStatsList, System.out);
+
+
+        File writer =
+            new File("/tmp/stats.xml");
+
+        writer.createNewFile();
+        marshaller.marshal(xmlCategoryStatsList, writer);
     }
 
 
