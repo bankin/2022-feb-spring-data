@@ -1,6 +1,6 @@
 package com.example.jsonex.productshop.services;
 
-import com.example.jsonex.productshop.entities.categories.CategoryStats;
+import com.example.jsonex.productshop.entities.categories.CategoryStatsDTO;
 import com.example.jsonex.productshop.entities.products.ProductWithoutBuyerDTO;
 import com.example.jsonex.productshop.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class ProductsServiceImpl implements ProductsService {
     }
 
     @Override
-    public List<CategoryStats> getCategoryStatistics() {
+    public List<CategoryStatsDTO> getCategoryStatistics() {
         return this.productRepository.getCategoryStats();
     }
 }

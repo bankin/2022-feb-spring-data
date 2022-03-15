@@ -1,6 +1,8 @@
 package com.example.jsonex.productshop;
 
-import com.example.jsonex.productshop.entities.categories.CategoryStats;
+import com.example.jsonex.productshop.entities.categories.CategoryStatsDTO;
+import com.example.jsonex.productshop.entities.categories.XMLCategoryStatsDTO;
+import com.example.jsonex.productshop.entities.categories.XMLCategoryStatsList;
 import com.example.jsonex.productshop.entities.products.ProductWithoutBuyerDTO;
 import com.example.jsonex.productshop.entities.users.UserWithSoldProductsDTO;
 import com.example.jsonex.productshop.services.ProductsService;
@@ -12,7 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ProductShopRunner implements CommandLineRunner {
@@ -44,14 +53,73 @@ public class ProductShopRunner implements CommandLineRunner {
 
 //        getCategoryStats();
 
-        this.userService.getUsersWithSoldProductsOrderByCount();
+//        this.userService.getUsersWithSoldProductsOrderByCount();
+
+        xmlDemo();
     }
 
+    /**
+     * [
+     *   {
+     *     "category": "Drugs",
+     *     "productCount": 68,
+     *     "averagePrice": 836.952941,
+     *     "totalRevenue": 56912.80
+     *   },
+     *   ...
+     *   ]
+     *
+     *   <categories-stats>
+     *       <category>
+     *           <name>Drugs</name>
+     *           <productCount>68</productCount>
+     *           <averagePrice>836..</averagePrice>
+     *           <totalRevenue>56912.80</totalRevenue>
+     *       </category>
+     *       ...
+     *   <categories-stats/>
+     */
+    private void xmlDemo() throws JAXBException {
+        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "      <category>\n" +
+                "         <name>Drugs</name>\n" +
+                "         <product-count>68</product-count>\n" +
+                "         <averagePrice>836.952941</averagePrice>\n" +
+                "         <totalRevenue>56912.80</totalRevenue>\n" +
+                "      </category>";
+
+        JAXBContext context = JAXBContext.newInstance(XMLCategoryStatsDTO.class);
+        Unmarshaller unmarshaller = context.createUnmarshaller();
+
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(xml.getBytes());
+        XMLCategoryStatsDTO result = (XMLCategoryStatsDTO)
+                unmarshaller.unmarshal(inputStream);
+
+        System.out.println(result);
+    }
+
+    private void xmlMarshallDemo() throws JAXBException {
+        List<XMLCategoryStatsDTO> xmlResult =
+            this.productsService
+                .getCategoryStatistics()
+                .stream()
+                .map(XMLCategoryStatsDTO::new)
+                .collect(Collectors.toList());
+
+        XMLCategoryStatsList xmlCategoryStatsList =
+                new XMLCategoryStatsList(xmlResult);
+
+        JAXBContext context = JAXBContext.newInstance(XMLCategoryStatsList.class);
+        Marshaller marshaller = context.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        marshaller.marshal(xmlCategoryStatsList, System.out);
+    }
+
+
     private void getCategoryStats() {
-        List<CategoryStats> categoryStatistics = this.productsService.getCategoryStatistics();
+        List<CategoryStatsDTO> result = this.productsService.getCategoryStatistics();
 
-        String json = this.gson.toJson(categoryStatistics);
-
+        String json = this.gson.toJson(result);
         System.out.println(json);
     }
 
