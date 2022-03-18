@@ -2,11 +2,15 @@ package com.example.xml_ex.productshop;
 
 import com.example.xml_ex.productshop.entities.products.ExportProductsInRangeDto;
 import com.example.xml_ex.productshop.entities.users.ExportSellersDTO;
+import com.example.xml_ex.productshop.entities.users.ExportSellersWithCountsDTO;
 import com.example.xml_ex.productshop.services.ProductsService;
 import com.example.xml_ex.productshop.services.SeedService;
 import com.example.xml_ex.productshop.services.UserService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import javax.xml.bind.JAXBContext;
@@ -33,7 +37,21 @@ public class ProductShopRunner implements CommandLineRunner {
 
 //        this.productsInRange();
 
-        this.findUserWithSoldProducts();
+        this.findUserWithSoldProductsAndCounts();
+
+    }
+
+    private void findUserWithSoldProductsAndCounts() {
+        ExportSellersWithCountsDTO dto = this.userService.findAllWithSoldProductsAndCounts();
+
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .serializeNulls()
+                .create();
+
+        String result = gson.toJson(dto);
+
+        System.out.println(result);
     }
 
     private void findUserWithSoldProducts() throws JAXBException {

@@ -1,10 +1,9 @@
 package com.example.xml_ex.productshop.services;
 
-import com.example.xml_ex.productshop.entities.users.ExportSellersDTO;
-import com.example.xml_ex.productshop.entities.users.ExportUserWithSoldProductsDTO;
-import com.example.xml_ex.productshop.entities.users.User;
+import com.example.xml_ex.productshop.entities.products.ExportNamePriceProductDTO;
+import com.example.xml_ex.productshop.entities.products.ExportSoldProductsDTO;
+import com.example.xml_ex.productshop.entities.users.*;
 import com.example.xml_ex.productshop.repositories.UserRepository;
-import com.sun.xml.bind.v2.schemagen.episode.SchemaBindings;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,5 +37,33 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
 
         return new ExportSellersDTO(dtos);
+    }
+
+    @Override
+    @Transactional
+    public ExportSellersWithCountsDTO findAllWithSoldProductsAndCounts() {
+        List<User> users = this.userRepository.findAllWithSoldProductsOrderByCount();
+
+        List<ExportUserWithSoldCountDTO> dtos =
+                users
+                    .stream()
+                    .map(this::createExportUserWithSoldCountDTO)
+                    .collect(Collectors.toList());
+
+        return new ExportSellersWithCountsDTO(dtos);
+    }
+
+    private ExportUserWithSoldCountDTO createExportUserWithSoldCountDTO(User u) {
+        ExportUserWithSoldCountDTO userDTO = this.mapper.map(u, ExportUserWithSoldCountDTO.class);
+
+        List<ExportNamePriceProductDTO> namePriceProductDTOS = u.getSellingItems()
+                .stream()
+                .map(p -> this.mapper.map(p, ExportNamePriceProductDTO.class))
+                .collect(Collectors.toList());
+
+        ExportSoldProductsDTO soldProductsDTO = new ExportSoldProductsDTO(namePriceProductDTOS);
+        userDTO.setSoldProducts(soldProductsDTO);
+
+        return userDTO;
     }
 }

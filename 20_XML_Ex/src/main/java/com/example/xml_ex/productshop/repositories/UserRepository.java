@@ -17,13 +17,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             " ORDER BY u.lastName, u.firstName")
     List<User> findAllWithSoldProducts();
 
-    @Query("SELECT u, " +
+    @Query("SELECT u FROM User u" +
+            " WHERE " +
             "   (SELECT COUNT(p) " +
             "    FROM Product p " +
-            "    WHERE p.seller = u AND p.buyer IS NOT NULL) AS soldCount" +
-            " FROM User u" +
-            " WHERE soldCount > 0" +
-            " ORDER BY soldCount DESC, u.lastName, u.firstName")
+            "    WHERE p.seller = u AND p.buyer IS NOT NULL) > 0")
     List<User> findAllWithSoldProductsOrderByCount();
 
 
