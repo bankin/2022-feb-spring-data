@@ -7,8 +7,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 public class NameDTO {
     private String name;
 
-    public NameDTO() {}
-
     public String getName() {
         return name;
     }

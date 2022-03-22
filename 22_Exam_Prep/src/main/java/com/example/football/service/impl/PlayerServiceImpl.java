@@ -13,7 +13,6 @@ import com.example.football.repository.TownRepository;
 import com.example.football.service.PlayerService;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,9 +40,9 @@ public class PlayerServiceImpl implements PlayerService {
             Path.of("src", "main", "resources", "files", "xml", "players.xml");
 
     private final PlayerRepository playerRepository;
-    private TeamRepository teamRepository;
-    private TownRepository townRepository;
-    private StatRepository statRepository;
+    private final TeamRepository teamRepository;
+    private final TownRepository townRepository;
+    private final StatRepository statRepository;
 
     private final Unmarshaller unmarshaller;
     private final Validator validator;
@@ -65,16 +64,26 @@ public class PlayerServiceImpl implements PlayerService {
 
         this.modelMapper = new ModelMapper();
 
-        Converter<String, LocalDate> toLocalDate = s -> s.getSource() == null ? null :
-                LocalDate.parse(s.getSource(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-
-//        this.modelMapper.createTypeMap(String.class, LocalDate.class);
+//      This DOES NOT work for some strange reason
+//        Converter<String, LocalDate> toLocalDate = s -> s.getSource() == null ? null :
+//                LocalDate.parse(s.getSource(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 //        this.modelMapper.addConverter(toLocalDate);
 
-        TypeMap<ImportPlayerDTO, Player> typeMap = this.modelMapper.createTypeMap(ImportPlayerDTO.class, Player.class);
+//      This works
+//        this.modelMapper.addConverter(new Converter<String, LocalDate>() {
+//            @Override
+//            public LocalDate convert(MappingContext<String, LocalDate> context) {
+//                return LocalDate.parse(context.getSource(), DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+//            }
+//        });
 
-        typeMap.addMappings(map -> map.using(toLocalDate).map(ImportPlayerDTO::getBirthDate, Player::setBirthDate));
+//      This also works
+//        this.modelMapper.addConverter((Converter<String, LocalDate>)
+//                context1 -> LocalDate.parse(context1.getSource(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 
+//      This also works
+        this.modelMapper.addConverter(ctx -> LocalDate.parse(ctx.getSource(), DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                String.class, LocalDate.class);
     }
 
     @Override

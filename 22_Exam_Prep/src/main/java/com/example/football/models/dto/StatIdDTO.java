@@ -10,8 +10,6 @@ public class StatIdDTO {
     @XmlElement
     private long id;
 
-    public StatIdDTO() {}
-
     public long getId() {
         return id;
     }
