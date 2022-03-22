@@ -29,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -141,6 +142,15 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public String exportBestPlayers() {
-        return null;
+        LocalDate before = LocalDate.of(2003, 1, 1);
+        LocalDate after = LocalDate.of(1995, 1, 1);
+
+        List<Player> players = this.playerRepository
+                .findByBirthDateBetweenOrderByStatShootingDescStatPassingDescStatEnduranceDescLastNameAsc(after, before);
+
+        return players
+            .stream()
+            .map(Player::toString)
+            .collect(Collectors.joining("\n"));
     }
 }

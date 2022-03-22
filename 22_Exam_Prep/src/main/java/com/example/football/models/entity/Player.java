@@ -122,4 +122,16 @@ public class Player {
     public int hashCode() {
         return Objects.hash(id, email);
     }
+
+    @Override
+    public String toString() {
+        return String.format("Player - %s %s%n" +
+                "\tPosition - %s%n" +
+                "\tTeam - %s%n" +
+                "\tStadium - %s",
+                this.firstName, this.lastName,
+                this.position.toString(),
+                this.team.getName(),
+                this.team.getStadiumName());
+    }
 }
