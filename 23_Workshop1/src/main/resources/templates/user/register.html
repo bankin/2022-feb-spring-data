@@ -12,24 +12,23 @@
     <hr class="bg-hero hr-2"/>
     <h1 class="text-center text-black display-4">Register</h1>
     <hr class="bg-hero w-25 hr-2"/>
-    <form class="mx-auto w-25" th:method="post" th:action="@{/users/register}">
-        <input type="hidden" name="_csrf" value="c95ccb2b-1afa-47bd-bf7b-a5b72739470b">
+    <form class="mx-auto w-25" th:method="post" th:action="@{/users/register}" th:object="${registrationDto}">
         <div class="form-group">
             <label for="username" class="text-black mb-1">Username</label>
-            <input type="text" class="form-control" id="username" placeholder="Username..." name="username">
+            <input th:field="*{username}" type="text" class="form-control" id="username" placeholder="Username..." name="username">
         </div>
         <div class="form-group">
             <label for="password" class="text-black mb-1">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Password..." name="password">
+            <input th:field="*{password}" type="password" class="form-control" id="password" placeholder="Password..." name="password">
         </div>
         <div class="form-group">
             <label for="confirmPassword" class="text-black mb-1">Confirm Password</label>
-            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password..."
+            <input th:field="*{confirmPassword}" type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password..."
                    name="confirmPassword">
         </div>
         <div class="form-group">
             <label for="email" class="text-black mb-1">Email</label>
-            <input type="email" class="form-control" id="email" placeholder="Email..." name="email">
+            <input th:field="*{email}" type="email" class="form-control" id="email" placeholder="Email..." name="email">
         </div>
         <hr class="bg-hero hr-2"/>
         <div class="button-holder mt-3 d-flex justify-content-center">

@@ -15,7 +15,7 @@ public class UserService {
     private ModelMapper modelMapper;
 
     @Autowired
-    public UserService(@Qualifier("alt") ModelMapper modelMapper, UserRepository userRepository) {
+    public UserService(ModelMapper modelMapper, UserRepository userRepository) {
         this.modelMapper = modelMapper;
         this.userRepository = userRepository;
     }

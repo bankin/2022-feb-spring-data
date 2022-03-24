@@ -5,7 +5,7 @@
         <last-name>Petrov</last-name>
         <age>45</age>
         <project>
-            <name>HealthCare</name>
+            <name>Health3Care</name>
             <description>Pharmacy web app</description>
             <start-date>2017-07-12</start-date>
             <is-finished>true</is-finished>
@@ -18,7 +18,7 @@
         <last-name>Rusev</last-name>
         <age>21</age>
         <project>
-            <name>MMA</name>
+            <name>MM4A</name>
             <description>Mixed martial arts club web site</description>
             <start-date>2018-09-21</start-date>
             <is-finished>true</is-finished>
@@ -334,7 +334,7 @@
             <description>Online fighting game</description>
             <start-date>2018-06-11</start-date>
             <is-finished>true</is-finished>
-            <payment>650000.00</payment>
+            <payment>-650000.00</payment>
             <company name="Vallor"/>
         </project>
     </employee>
